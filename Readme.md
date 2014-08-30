@@ -17,13 +17,16 @@ Specify xcode version
 
 ```
 $ xcode 
-$ xcode 5
+$ xcode 4
 $ xcode 6-Beta6
 ```
 
 Check which xcode version is installed
 ```
 $ xcode -l
+Xcode.app
+Xcode4.app
+Xcode6-Beta6.app
 ```
 
 ## Install
