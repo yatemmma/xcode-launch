@@ -1,4 +1,4 @@
-xcode launcher
+xcode-launch
 ====
 
 Launch xcode from command line.
@@ -28,7 +28,10 @@ $ xcode -l
 
 ## Install
 
-TBD
+```
+$ git clone https://gist.github.com/e18f854d0a0b5955cec6.git xcode-launch
+$ ln -s `pwd`/xcode-launch/xcode-launch.sh /usr/local/bin/xcode
+```
 
 ## License
 
