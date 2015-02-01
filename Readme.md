@@ -7,26 +7,40 @@ Launch xcode from command line.
 
 Launch xcode project
 ```
-$ xcode
+$ xcode .
 $ xcode sample
 $ xcode sample/sample.xcodeproj
 $ xcode sample1 sample2
 ```
 
+Show xcode projects under current directory
+
+```
+$ xcode -l
+./sample1/sample1.xcodeproj
+./sample2/sample2.xcodeproj
+```
+
 Specify xcode version
 
 ```
-$ xcode 
-$ xcode 4
-$ xcode 6-Beta6
+$ xcode 4 sample
+$ xcode 6-Beta6 sample1 sample2
 ```
 
 Check which xcode version is installed
 ```
-$ xcode -l
+$ xcode -s
 Xcode.app
 Xcode4.app
 Xcode6-Beta6.app
+```
+
+## Extra
+
+with peco
+```
+$ xcode -l | peco | xargs xcode
 ```
 
 ## Install

@@ -1,28 +1,33 @@
 #!/bin/bash
 
 APPNAME="xcode-launch"
-VERSION=0.0.1
+VERSION=0.0.2
 
 usage() {
 cat << _END_
 $APPNAME $VERSION
 Usage: 
-    xcode [<version>] [<projects>...]
-    xcode [<option>]
+    xcode [version] [project...]
+    xcode [option]
 
 Some useful options are:
-    -l, --list    List all installed xcode version
+    -s, --showsdks    List all installed xcode version
+    -l, --list        List xcode projects under current directory
 
 _END_
 }
 
-versions() {
+show_sdks() {
 	VERSIONS=`ls /Applications/ | grep "^Xcode.*\.app"`
 	if [ "x$VERSIONS" = "x" ]; then
 		echo "xcode not found in /Applications"
 	else
 		echo "$VERSIONS"
 	fi
+}
+
+show_projects() {
+  find . -type d -name '*.xcodeproj'
 }
 
 for OPT in $*
@@ -36,8 +41,12 @@ do
             usage
             exit
             ;;
+        '-s' | '--showsdks' )
+            show_sdks
+            exit
+            ;;
         '-l' | '--list' )
-            versions
+            show_projects
             exit
             ;;
     esac
@@ -56,25 +65,26 @@ do
 done
 
 if [ "x$SEARCH_PATH" = "x" ]; then
-	SEARCH_PATH=.
+	usage
+  exit
 fi
 
 for target in $SEARCH_PATH
 do
-	if [ -d $target ];then
+	if [ -d $target ]; then
 		PROJECT_PATH="$PROJECT_PATH `find $target -type d -name '*.xcodeproj'`"
 	fi
 done
 
 for project in $PROJECT_PATH
 do
-	if [ -d $project ];then
+	if [ -d $project ]; then
 		echo "open -a $XCODE_PATH $project"
 		open -a $XCODE_PATH "$project"
 		OPENED=YES
 	fi
 done
 
-if [ "x$OPENED" = "x" ];then
+if [ "x$OPENED" = "x" ]; then
 	echo "xcode project not found."
 fi
