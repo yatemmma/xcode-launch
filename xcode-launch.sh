@@ -1,7 +1,7 @@
 #!/bin/bash
 
 APPNAME="xcode-launch"
-VERSION=0.0.2
+VERSION=0.0.3
 
 usage() {
 cat << _END_
@@ -18,7 +18,7 @@ _END_
 }
 
 show_sdks() {
-	VERSIONS=`ls /Applications/ | grep "^Xcode.*\.app"`
+	VERSIONS=`ls /Applications/ | grep "^Xcode.*\.app" | sed -e 's/^Xcode.app$/(default)/' | sed -e 's/Xcode\(.*\).app/\1/'`
 	if [ "x$VERSIONS" = "x" ]; then
 		echo "xcode not found in /Applications"
 	else
@@ -27,12 +27,12 @@ show_sdks() {
 }
 
 show_projects() {
-  find . -type d -name '*.xcodeproj'
+    find $* -type d -name '*.xcodeproj'
 }
 
-for OPT in $*
+for opt in $*
 do
-    case $OPT in
+    case $opt in
         '-v' | '--version' )
             echo $APPNAME $VERSION
             exit
@@ -46,45 +46,59 @@ do
             exit
             ;;
         '-l' | '--list' )
-            show_projects
+            show_projects .
             exit
             ;;
     esac
 done
 
-XCODE_PATH="/Applications/Xcode.app"
-
-while [ "$#" -gt 0 ]
-do
-	if [ -d "/Applications/Xcode$1.app" ]; then
-		XCODE_PATH="/Applications/Xcode$1.app"
-	else
-		SEARCH_PATH="$SEARCH_PATH $1"
-	fi
-	shift
-done
-
-if [ "x$SEARCH_PATH" = "x" ]; then
-	usage
-  exit
+if [ -d "/Applications/Xcode$1.app" ]; then
+    XCODE_PATH="/Applications/Xcode$1.app"
+    shift
+else
+    XCODE_PATH="/Applications/Xcode.app"
 fi
 
-for target in $SEARCH_PATH
-do
-	if [ -d $target ]; then
-		PROJECT_PATH="$PROJECT_PATH `find $target -type d -name '*.xcodeproj'`"
-	fi
-done
+ARGS=$*
+if [ x$ARGS = x ]; then
+    ARGS="."
+fi
 
-for project in $PROJECT_PATH
+FIND_COUNT=`show_projects $ARGS 2>/dev/null | wc -l `
+if [ $FIND_COUNT -eq 0 ]; then
+    echo "xcode project not found."
+    exit
+fi
+
+if [ -z "${XCODE_LAUNCH_INTERACTIVE_SHELL+x}" ]; then
+    peco -h >/dev/null 2>&1
+    if [ $? -eq 0 ]; then
+        XCODE_LAUNCH_INTERACTIVE_SHELL=peco
+    fi
+fi
+
+if [ $FIND_COUNT -eq 1 ]; then
+    PROJECTS=`show_projects $ARGS`
+elif [ x$XCODE_LAUNCH_INTERACTIVE_SHELL != x ]; then
+    PROJECTS=`show_projects $ARGS | $XCODE_LAUNCH_INTERACTIVE_SHELL`
+else
+    show_projects $ARGS
+    echo "open multiple projects? [Y/n]"
+    read ANSWER
+    case $ANSWER in
+        "" | "Y" | "y" | "yes" | "Yes" | "YES")
+            PROJECTS=`show_projects $ARGS`
+            ;;
+        *) 
+            exit
+            ;;
+    esac
+fi
+
+for project in $PROJECTS
 do
 	if [ -d $project ]; then
 		echo "open -a $XCODE_PATH $project"
 		open -a $XCODE_PATH "$project"
-		OPENED=YES
 	fi
 done
-
-if [ "x$OPENED" = "x" ]; then
-	echo "xcode project not found."
-fi

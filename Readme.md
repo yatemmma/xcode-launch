@@ -6,8 +6,9 @@ Launch xcode from command line.
 ## Usage
 
 Launch xcode project
+
 ```
-$ xcode .
+$ xcode
 $ xcode sample
 $ xcode sample/sample.xcodeproj
 $ xcode sample1 sample2
@@ -29,18 +30,27 @@ $ xcode 6-Beta6 sample1 sample2
 ```
 
 Check which xcode version is installed
+
 ```
 $ xcode -s
-Xcode.app
-Xcode4.app
-Xcode6-Beta6.app
+(default)
+4
+6-Beta3
+6-Beta6
 ```
 
-## Extra
+## Intaractive Shell
 
-with peco
+Default use peco, if you specify
+
 ```
-$ xcode -l | peco | xargs xcode
+$ export $XCODE_LAUNCH_INTERACTIVE_SHELL=percol
+```
+
+not use
+
+```
+$ export $XCODE_LAUNCH_INTERACTIVE_SHELL=
 ```
 
 ## Install
@@ -49,6 +59,10 @@ $ xcode -l | peco | xargs xcode
 $ git clone https://gist.github.com/e18f854d0a0b5955cec6.git xcode-launch
 $ ln -s `pwd`/xcode-launch/xcode-launch.sh /usr/local/bin/xcode
 ```
+
+## Support
+
+* bash
 
 ## License
 
