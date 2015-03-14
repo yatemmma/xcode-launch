@@ -56,7 +56,7 @@ $ export $XCODE_LAUNCH_INTERACTIVE_SHELL=
 ## Install
 
 ```
-$ git clone https://gist.github.com/e18f854d0a0b5955cec6.git xcode-launch
+$ git clone https://github.com/yatemmma/xcode-launch.git
 $ ln -s `pwd`/xcode-launch/xcode-launch.sh /usr/local/bin/xcode
 ```
 
