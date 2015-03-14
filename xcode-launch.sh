@@ -70,7 +70,7 @@ if [ $FIND_COUNT -eq 0 ]; then
     exit
 fi
 
-if [ -z "${XCODE_LAUNCH_INTERACTIVE_SHELL+x}" ]; then
+if [ x$XCODE_LAUNCH_INTERACTIVE_SHELL != xnone ]; then
     peco -h >/dev/null 2>&1
     if [ $? -eq 0 ]; then
         XCODE_LAUNCH_INTERACTIVE_SHELL=peco
@@ -79,7 +79,7 @@ fi
 
 if [ $FIND_COUNT -eq 1 ]; then
     PROJECTS=`show_projects $ARGS`
-elif [ x$XCODE_LAUNCH_INTERACTIVE_SHELL != x ]; then
+elif [ x$XCODE_LAUNCH_INTERACTIVE_SHELL != xnone ]; then
     PROJECTS=`show_projects $ARGS | $XCODE_LAUNCH_INTERACTIVE_SHELL`
 else
     show_projects $ARGS
