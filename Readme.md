@@ -44,13 +44,13 @@ $ xcode -s
 Default use peco, if you specify
 
 ```
-$ export $XCODE_LAUNCH_INTERACTIVE_SHELL=percol
+$ export XCODE_LAUNCH_INTERACTIVE_SHELL=percol
 ```
 
 not use
 
 ```
-$ export $XCODE_LAUNCH_INTERACTIVE_SHELL=
+$ export XCODE_LAUNCH_INTERACTIVE_SHELL=none
 ```
 
 ## Install
